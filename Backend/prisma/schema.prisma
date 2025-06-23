@@ -1,0 +1,63 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// SYSTEM USERS
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  name     String
+
+  // Relação de volta: Um usuário pode ter vários carros
+  cars     Car[]
+}
+
+// CAR USERS
+model Car {
+  car_license      String @id
+  brand            String
+  model            String // <-- CAMPO ADICIONADO
+  color            String
+  manufacture_year String
+  model_year       String
+  km               Int
+
+  // Relação com User
+  user_id          Int
+  user_car         User   @relation(fields: [user_id], references: [id])
+
+  // Relação de volta: Um carro pode ter vários registros de manutenção
+  maintenances     Maintenance_register[]
+}
+
+model Maintenance_register {
+  maintenance_id Int      @id @default(autoincrement())
+  service        String
+  date           DateTime 
+  car_km         Int
+  price          Decimal  @db.Decimal(10, 2) 
+
+  // Relação com Car
+  car_license    String
+  maintenance_car Car      @relation(fields: [car_license], references: [car_license])
+
+  // Relação de volta: Um registro de manutenção tem uma nota fiscal
+  invoice        Maintenance_invoice?
+}
+
+model Maintenance_invoice {
+  // Relação 1-para-1 com Maintenance_register
+  maintenance_id Int    @id 
+  invoice        String
+
+  maintenance_invoice Maintenance_register @relation(fields: [maintenance_id], references: [maintenance_id])
+}
