@@ -1,16 +1,39 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Arquivos de ambiente - NUNCA ENVIE DADOS SENSÍVEIS
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Pasta de dependências
+/node_modules
+
+# Pasta do cliente Prisma gerado
+/src/generated/
+
+# Pasta de build do TypeScript
+/dist
+
+# Arquivos do Yarn 4 (ignora o cache e arquivos temporários, mas mantém a configuração)
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-.env
 
-# Swap the comments on the following lines if you wish to use zero-installs
-# In that case, don't forget to run `yarn config set enableGlobalCache false`!
-# Documentation here: https://yarnpkg.com/features/caching#zero-installs
-
-#!.yarn/cache
+# Arquivos do sistema de Plug'n'Play do Yarn (bom manter por segurança)
 .pnp.*
 
-/src/generated/prisma
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db

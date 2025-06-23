@@ -12,7 +12,7 @@ datasource db {
 
 // SYSTEM USERS
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id
   email    String @unique
   password String
   name     String
@@ -25,14 +25,14 @@ model User {
 model Car {
   car_license      String @id
   brand            String
-  model            String // <-- CAMPO ADICIONADO
+  model            String 
   color            String
   manufacture_year String
   model_year       String
   km               Int
 
   // Relação com User
-  user_id          Int
+  user_id          String
   user_car         User   @relation(fields: [user_id], references: [id])
 
   // Relação de volta: Um carro pode ter vários registros de manutenção
