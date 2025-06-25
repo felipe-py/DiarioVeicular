@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.repository.prisma";
 import { prisma } from "../../../util/prisma.util";
 import { UserServiceImplementation } from "../../../services/user/implementation/user.service.implementation";
-import { validUser } from "../../../validators/user.validator";
-import { ZodError } from "zod";
+import { validLogin, validUser } from "../../../validators/user.validator";
+import { handleUserErrors } from "./helpers/handle.error.helper";
 
 export class UserController {
     private constructor() {}
@@ -28,18 +28,34 @@ export class UserController {
         
         } catch (error) {
 
-            if (error instanceof ZodError) {
-                return response.status(400).json({
-                    message: "Erro de validação",
-                    errors: error.flatten().fieldErrors,
-                });
-            }
+        const resultError = handleUserErrors(error);
 
-            console.error(error); 
-            return response.status(500).json({
-                message: "Ocorreu um erro interno no servidor.",
-            });
+        response.status(resultError.status).json(resultError.body);
+    
         }  
+    }
+
+    public async login(request: Request, response: Response) {
+        const {email, password } = request.body;
+
+        try {
+
+            validLogin.parse({email, password});
+
+            const aRepository = UserRepositoryPrisma.build(prisma);
+            const aService = UserServiceImplementation.build(aRepository);
+
+            const output = await aService.find(email, password);
+
+            response.status(200).json(output).send();
+
+        } catch (error) {
+
+        const resultError = handleUserErrors(error);
+
+        response.status(resultError.status).json(resultError.body);
+        
+        }
     }
     
 }
