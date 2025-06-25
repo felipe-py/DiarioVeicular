@@ -3,6 +3,7 @@ export type CreateOutputDto = {
     email: string;
     password: string;
     name: string;
+    message: string
 };
 
 export interface UserService {
