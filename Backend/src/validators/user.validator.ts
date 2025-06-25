@@ -17,4 +17,9 @@ export const validUser = z.object({
     email: validEmailUser,
     password: validPasswordUser,
     name: validUserName
-})
+});
+
+export const validLogin = z.object({
+    email: validEmailUser,
+    password: validPasswordUser
+});
