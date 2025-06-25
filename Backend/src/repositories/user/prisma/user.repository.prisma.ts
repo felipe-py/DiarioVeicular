@@ -38,14 +38,12 @@ export class UserRepositoryPrisma implements UserRepository {
         });    
     }
 
-    public async find(id: string): Promise<User | null> {
+    public async find(email: string): Promise<User | null> {
         const aUser = await this.prisma.user.findUnique({
-            where: { id },
+            where: { email },
         });
 
-        if(!aUser) { return null; }
-
-        const { email, password, name} = aUser;
+        const { id, password, name} = aUser;
 
         const user = User.with(id, email, password, name);
 
