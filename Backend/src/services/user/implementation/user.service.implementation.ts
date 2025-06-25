@@ -19,6 +19,7 @@ export class UserServiceImplementation implements UserService{
             email: aUser.email,
             password: aUser.password,
             name: aUser.name,
+            message: "Cadastro realizado com sucesso"
         };
 
         return output;
