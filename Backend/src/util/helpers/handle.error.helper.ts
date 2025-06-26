@@ -1,4 +1,6 @@
 import { ZodError } from "zod";
+import { ConflictError } from "../../errors/user/user.error.conflict";
+import { AuthenticationError } from "../../errors/user/user.error.Authentication";
 
 type output = {
     status: number;
@@ -19,6 +21,24 @@ export function handleUserErrors(error: unknown): output {
             },
         };
     };
+
+    if (error instanceof ConflictError) {
+        return {
+            status: error.statusCode,
+            body: {
+                message: error.message
+            }
+        }
+    }
+
+    if (error instanceof AuthenticationError) {
+        return {
+            status: error.statusCode,
+            body: {
+                message: error.message
+            }
+        }
+    }
 
     console.error(error); 
     
