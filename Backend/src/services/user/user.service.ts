@@ -1,7 +1,6 @@
 export type CreateOutputDto = {
     id: string;
     email: string;
-    password: string;
     name: string;
     message: string;
 };

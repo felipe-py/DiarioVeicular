@@ -22,7 +22,6 @@ export class UserServiceImplementation implements UserService{
         const output: CreateOutputDto = {
             id: aUser.id,
             email: aUser.email,
-            password: aUser.password,
             name: aUser.name,
             message: "Cadastro realizado com sucesso"
         };
