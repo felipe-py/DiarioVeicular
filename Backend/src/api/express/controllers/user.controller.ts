@@ -3,7 +3,7 @@ import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.rep
 import { prisma } from "../../../util/prisma.util";
 import { UserServiceImplementation } from "../../../services/user/implementation/user.service.implementation";
 import { validLogin, validUser } from "../../../validators/user.validator";
-import { handleUserErrors } from "./helpers/handle.error.helper";
+import { handleUserErrors } from "../../../util/helpers/handle.error.helper";
 
 export class UserController {
     private constructor() {}
