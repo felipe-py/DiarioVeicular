@@ -22,7 +22,7 @@ export class UserController {
             const aRepository = UserRepositoryPrisma.build(prisma);
             const aService = UserServiceImplementation.build(aRepository);
 
-            const output = await aService.create(email, password, name)
+            const output = await aService.createService(email, password, name)
 
             response.status(201).json(output).send();
         
@@ -45,7 +45,7 @@ export class UserController {
             const aRepository = UserRepositoryPrisma.build(prisma);
             const aService = UserServiceImplementation.build(aRepository);
 
-            const output = await aService.find(email, password);
+            const output = await aService.loginService(email, password);
 
             response.status(200).json(output).send();
 

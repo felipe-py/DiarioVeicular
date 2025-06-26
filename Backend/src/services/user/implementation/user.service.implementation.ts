@@ -1,5 +1,7 @@
 import { User } from "../../../entities/user";
 import { UserRepository } from "../../../repositories/user/user.repository";
+import { handleGenerateToken } from "../../../util/helpers/handle.generate.token";
+import { handleNullValues } from "../../../util/helpers/handle.null.values";
 import { CreateOutputDto, LoginOutputDto, UserService } from "../user.service";
 import * as bcrypt from "bcryptjs"
 
@@ -10,7 +12,7 @@ export class UserServiceImplementation implements UserService{
         return new UserServiceImplementation(repository)
     }
 
-    public async create(email: string, password: string, name: string): Promise<CreateOutputDto> {
+    public async createService(email: string, password: string, name: string): Promise<CreateOutputDto> {
 
         const hashPassword = await bcrypt.hash(password, 10);
 
@@ -29,19 +31,25 @@ export class UserServiceImplementation implements UserService{
         
     }
 
-    public async find(email: string, password: string): Promise<LoginOutputDto> {
+    public async loginService(email: string, password: string): Promise<LoginOutputDto> {
         
         const aUser = await this.repository.find(email);
 
-        if (!aUser) {throw new Error("Email ou senha inválidos")};
+        handleNullValues(aUser, "Email ou senha inválidos");
 
         const isMatch = await bcrypt.compare(password, aUser.password)
 
-        if (!isMatch) {throw new Error("Email ou senha inválidos")};
+        handleNullValues(isMatch, "Email ou senha inválidos");
+
+        const tokenGerado = handleGenerateToken(aUser);
 
         const output: LoginOutputDto = {
-            email: aUser.email,
-            name: aUser.name,
+            user: {
+                id: aUser.id,
+                email: aUser.email,
+                name: aUser.name,
+            },
+            token: tokenGerado,
             message: "Login realizado com sucesso"
         };
 

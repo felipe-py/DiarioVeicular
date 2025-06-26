@@ -7,6 +7,7 @@ function main () {
     const controller = UserController.build();
 
     api.addPostRoute("/users/register", controller.create);
+    api.addPostRoute("/users/login", controller.login)
 
     api.start(8000);
 }

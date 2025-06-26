@@ -7,12 +7,16 @@ export type CreateOutputDto = {
 };
 
 export type LoginOutputDto = {
-    email: string;
-    name: string;
+    user: {
+        id: string;
+        email: string;
+        name: string;
+    }
+    token: string;
     message: string;
 }
 
 export interface UserService {
-    create(email: string, password: string, name: string): Promise<CreateOutputDto>;
-    find(email: string, password: string): Promise<LoginOutputDto>;
+    createService(email: string, password: string, name: string): Promise<CreateOutputDto>;
+    loginService(email: string, password: string): Promise<LoginOutputDto>;
 }
