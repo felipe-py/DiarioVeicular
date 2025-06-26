@@ -10,6 +10,7 @@ type outputError = {
 
 
 export function handleUserErrors(error: unknown): outputError {
+    
     if (error instanceof ZodError) {
         return {status: 400, 
             body: {
