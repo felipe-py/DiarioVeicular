@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 
-type outputError = {
+type output = {
     status: number;
     body: {
         message: string,
@@ -9,7 +9,7 @@ type outputError = {
 };
 
 
-export function handleUserErrors(error: unknown): outputError {
+export function handleUserErrors(error: unknown): output {
     
     if (error instanceof ZodError) {
         return {status: 400, 

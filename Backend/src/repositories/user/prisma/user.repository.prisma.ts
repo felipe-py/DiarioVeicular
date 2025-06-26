@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { UserRepository } from "../user.repository";
 import { User } from "../../../entities/user";
 import { Prisma } from "../../../generated/prisma";
+import { ConflictError } from "../../../errors/user/user.error.conflict";
 
 export class UserRepositoryPrisma implements UserRepository {
     private constructor(readonly prisma: PrismaClient) {}
@@ -19,23 +20,21 @@ export class UserRepositoryPrisma implements UserRepository {
         };
 
         try {
-
-            await this.prisma.user.create({
-            data,
-            });
-
+        // Tenta a inserção diretamente (1 chamada ao banco)
+            await this.prisma.user.create({ data: user });
         } catch (error) {
-
-            if ( error instanceof Prisma.PrismaClientKnownRequestError) {
-                
-                if (error.code === 'P2002') {
-                    throw new Error("Email inválido"); 
-                }
+        // Se falhar por e-mail duplicado, o Prisma lança o P2002
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+            // E nós o traduzimos para um erro de negócio
+                throw new ConflictError("Este e-mail já está em uso.");
             }
+        // Se for outro erro, ele continua "borbulhando"
+        throw error;
+    }
 
-            throw error;
-
-        }
+        await this.prisma.user.create({
+        data,
+        });
 
     }
 
