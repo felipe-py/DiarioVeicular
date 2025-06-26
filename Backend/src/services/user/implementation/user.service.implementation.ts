@@ -1,8 +1,6 @@
 import { User } from "../../../entities/user";
 import { AuthenticationError } from "../../../errors/user/user.error.Authentication";
-import { ConflictError } from "../../../errors/user/user.error.conflict";
 import { UserRepository } from "../../../repositories/user/user.repository";
-import { handleUserErrors } from "../../../util/helpers/handle.error.helper";
 import { handleGenerateToken } from "../../../util/helpers/handle.generate.token";
 import { handleNullValues } from "../../../util/helpers/handle.null.values";
 import { CreateOutputDto, LoginOutputDto, UserService } from "../user.service";
@@ -38,7 +36,9 @@ export class UserServiceImplementation implements UserService{
         
         const aUser = await this.repository.find(email);
 
-        handleNullValues(aUser, "Email ou senha inválidos");
+        if (!aUser) {
+            throw new AuthenticationError("Email ou senha inválidos");
+        }
 
         const isMatch = await bcrypt.compare(password, aUser.password);
 
