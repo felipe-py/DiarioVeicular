@@ -21,7 +21,9 @@ export class UserRepositoryPrisma implements UserRepository {
 
         try {
         // Tenta a inserção diretamente (1 chamada ao banco)
-            await this.prisma.user.create({ data: user });
+            await this.prisma.user.create({
+                data,
+            });
         } catch (error) {
         // Se falhar por e-mail duplicado, o Prisma lança o P2002
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
@@ -29,13 +31,8 @@ export class UserRepositoryPrisma implements UserRepository {
                 throw new ConflictError("Este e-mail já está em uso.");
             }
         // Se for outro erro, ele continua "borbulhando"
-        throw error;
-    }
-
-        await this.prisma.user.create({
-        data,
-        });
-
+            throw error;
+        }
     }
 
     public async update(user: User): Promise<void> {
