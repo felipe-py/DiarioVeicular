@@ -2,7 +2,6 @@ import { User } from "../../../entities/user";
 import { AuthenticationError } from "../../../errors/user/user.error.Authentication";
 import { UserRepository } from "../../../repositories/user/user.repository";
 import { handleGenerateToken } from "../../../util/helpers/handle.generate.token";
-import { handleNullValues } from "../../../util/helpers/handle.null.values";
 import { CreateOutputDto, LoginOutputDto, UserService } from "../user.service";
 import * as bcrypt from "bcryptjs"
 
