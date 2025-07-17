@@ -1,4 +1,4 @@
-import express,  { Request, Response, Express } from "express";
+import express,  { Request, Response, Express, RequestHandler } from "express";
 import { Api } from "../api";
 
 interface RegisteredRoute {
@@ -19,15 +19,15 @@ export class ApiExpress implements Api {
 
     public addGetRoute(
         path: string,
-        handler: (req: Request, res: Response) => void ) : void {
-            this.app.get(path, handler);
+        ...handlers: RequestHandler[]): void {
+            this.app.get(path, ...handlers);
             this.registeredRoute.push({method: "GET", path});
         }
 
     public addPostRoute(
         path: string,
-        handler: (req: Request, res: Response) => void ) : void {
-            this.app.post(path, handler);
+        ...handlers: RequestHandler[]) : void {
+            this.app.post(path, ...handlers);
             this.registeredRoute.push({method: "POST", path});
         }
 
