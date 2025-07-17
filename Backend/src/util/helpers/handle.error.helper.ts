@@ -11,7 +11,7 @@ type output = {
 };
 
 
-export function handleUserErrors(error: unknown): output {
+export function handleErrors(error: unknown): output {
     
     if (error instanceof ZodError) {
         return {status: 400, 

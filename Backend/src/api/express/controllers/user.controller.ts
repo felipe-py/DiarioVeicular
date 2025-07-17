@@ -3,7 +3,7 @@ import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.rep
 import { prisma } from "../../../util/prisma.util";
 import { UserServiceImplementation } from "../../../services/user/implementation/user.service.implementation";
 import { validLogin, validUser } from "../../../validators/user.validator";
-import { handleUserErrors } from "../../../util/helpers/handle.error.helper";
+import { handleErrors } from "../../../util/helpers/handle.error.helper";
 
 export class UserController {
     private constructor() {}
@@ -28,7 +28,7 @@ export class UserController {
         
         } catch (error) {
 
-        const resultError = handleUserErrors(error);
+        const resultError = handleErrors(error);
 
         response.status(resultError.status).json(resultError.body);
     
@@ -51,7 +51,7 @@ export class UserController {
 
         } catch (error) {
 
-        const resultError = handleUserErrors(error);
+        const resultError = handleErrors(error);
 
         response.status(resultError.status).json(resultError.body);
         
