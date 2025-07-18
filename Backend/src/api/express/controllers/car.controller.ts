@@ -4,6 +4,7 @@ import { prisma } from "../../../util/prisma.util";
 import { CarServiceImplementation } from "../../../services/car/implementation/car.service.implementation";
 import { handleErrors } from "../../../util/helpers/handle.error.helper";
 import { AuthenticationError } from "../../../errors/user/user.error.Authentication";
+import { validCar } from "../../../validators/car.validator";
 
 export class CarController{
 
@@ -16,9 +17,13 @@ export class CarController{
     public async create(request: Request, response: Response) {
         
         const { car_license, brand, model, color, manufacture_year, model_year, km } = request.body
+        
+        // DESTA FORMA ELE PEGA O ID DIRETEMENTE DO TOKEN JWT
         const onwer_id = request.user?.id;
 
         try {
+
+            validCar.parse({car_license, brand, model, color, manufacture_year, model_year, km});
 
             if(!onwer_id) { throw new AuthenticationError("Acesso negado"); }
 
