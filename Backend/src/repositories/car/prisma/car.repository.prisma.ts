@@ -22,7 +22,7 @@ export class CarRepositoryPrisma implements CarRepository {
             manufacture_year: car.carManufactureYear,
             model_year: car.carModelYear,
             km: car.carKm, 
-            user_id: car.carOnwer,
+            user_id: car.carOwner,
         };
 
         try {
@@ -47,7 +47,7 @@ export class CarRepositoryPrisma implements CarRepository {
             manufacture_year: car.carManufactureYear,
             model_year: car.carModelYear,
             km: car.carKm, 
-            user_id: car.carOnwer,
+            user_id: car.carOwner,
         };
 
         await this.prisma.car.update({
@@ -59,18 +59,49 @@ export class CarRepositoryPrisma implements CarRepository {
         
     }
 
-    public async find(car_license: string): Promise<Car | null> {
-        
-        const aCar = await this.prisma.car.findUnique({
+    public async findByLicense(car_license: string): Promise<Car | null> {
+    
+        const carFromDb = await this.prisma.car.findUnique({
             where: { car_license },
         });
 
-        if (!aCar) { return null };
+        if (!carFromDb) { 
+            return null;
+        }
 
-        const { brand, model, color, manufacture_year, model_year, km, onwer} = aCar;
+        const { user_id, brand, model, color, manufacture_year, model_year, km } = carFromDb;
 
-        const car = Car.with(car_license, brand, model, color, manufacture_year, model_year, km, onwer);
+        const car = Car.with(
+            car_license, 
+            brand, 
+            model, 
+            color, 
+            manufacture_year, 
+            model_year, 
+            km, 
+            user_id 
+        );
 
         return car;
+    }
+
+    public async delete(car_license: string): Promise<Car> {
+
+        try {
+
+            const deleteCar = await this.prisma.car.delete({
+                where: {
+                    car_license: car_license,
+                },
+            });
+
+            return deleteCar;
+
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+                throw new ConflictError("Veículo não encontrado");
+            }
+            throw error;
+        }
     }
 }
