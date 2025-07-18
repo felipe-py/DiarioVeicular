@@ -30,6 +30,13 @@ export class ApiExpress implements Api {
             this.app.post(path, ...handlers);
             this.registeredRoute.push({method: "POST", path});
         }
+    
+    public addDeleteRoute(
+        path: string,
+        ...handlers: RequestHandler[]) : void {
+            this.app.delete(path, ...handlers);
+            this.registeredRoute.push({method: "DELETE", path});
+        }
 
     public start(port: number) {
         this.app.listen(port, () => {
