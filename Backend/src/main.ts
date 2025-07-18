@@ -11,7 +11,9 @@ function main () {
 
     api.addPostRoute("/users/register", userController.create);
     api.addPostRoute("/users/login", userController.login);
+    
     api.addPostRoute("cars/register", authMiddleware, carController.create);
+    api.addDeleteRoute("cars/delete", authMiddleware, carController.delete);
 
     api.start(8000);
 }
