@@ -4,7 +4,7 @@ import { prisma } from "../../../util/prisma.util";
 import { CarServiceImplementation } from "../../../services/car/implementation/car.service.implementation";
 import { handleErrors } from "../../../util/helpers/handle.error.helper";
 import { AuthenticationError } from "../../../errors/user/user.error.Authentication";
-import { validCar } from "../../../validators/car.validator";
+import { validCar, validCarLicenseInput } from "../../../validators/car.validator";
 
 export class CarController{
 
@@ -35,8 +35,33 @@ export class CarController{
             response.status(201).json(output).send();
 
         } catch (error) {
+
             const resultError = handleErrors(error);
             response.status(resultError.status).json(resultError.body);
+        
+        }
+    }
+
+    public async delete(request: Request, response: Response) {
+
+        const { car_license } = request.body;
+
+        validCarLicenseInput.parse({car_license});
+
+        try {
+
+            const aRepository = CarRepositoryPrisma.build(prisma);
+            const aService = CarServiceImplementation.build(aRepository);
+
+            const output = await aService.deleteCarService(car_license);
+
+            response.status(201).json(output).send();
+
+        } catch (error) {
+
+            const resultError = handleErrors(error);
+            response.status(resultError.status).json(resultError.body);
+
         }
     }
 }
