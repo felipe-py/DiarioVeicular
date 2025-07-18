@@ -6,7 +6,7 @@ export type CarProps = {
     manufacture_year: string;
     model_year: string;
     km: number;
-    onwer_id: string
+    owner_id: string
 }
 
 export class Car {
@@ -20,7 +20,7 @@ export class Car {
         manufacture_year: string,
         model_year: string,
         km: number,
-        onwer_id: string) {
+        owner_id: string) {
 
             return new Car({
                 car_license,
@@ -30,7 +30,7 @@ export class Car {
                 manufacture_year,
                 model_year,
                 km,
-                onwer_id,
+                owner_id,
             });
     }
 
@@ -42,7 +42,7 @@ export class Car {
         manufacture_year: string,
         model_year: string,
         km: number,
-        onwer_id: string) {
+        owner_id: string) {
 
             return new Car({
                 car_license,
@@ -52,7 +52,7 @@ export class Car {
                 manufacture_year,
                 model_year,
                 km,
-                onwer_id
+                owner_id
             });
         }
 
@@ -84,7 +84,7 @@ export class Car {
         return this.props.km;
     }
 
-    public get carOnwer() {
-        return this.props.onwer_id;
+    public get carOwner() {
+        return this.props.owner_id;
     }
 }
