@@ -30,4 +30,8 @@ export const validCar = z.object({
     manufactureYear: validYear,
     model_year: validYear,
     km: validKm
-})
+});
+
+export const validCarLicenseInput = z.object({
+    car_license: validCarLicense
+});
