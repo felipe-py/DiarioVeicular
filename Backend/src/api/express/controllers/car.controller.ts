@@ -4,7 +4,7 @@ import { prisma } from "../../../util/prisma.util";
 import { CarServiceImplementation } from "../../../services/car/implementation/car.service.implementation";
 import { handleErrors } from "../../../util/helpers/handle.error.helper";
 import { AuthenticationError } from "../../../errors/user.error.Authentication";
-import { validCar, validCarLicenseInput } from "../../../validators/car.validator";
+import { validCar, validCarLicenseInput, validUpdate } from "../../../validators/car.validator";
 
 export class CarController{
 
@@ -25,7 +25,7 @@ export class CarController{
 
             validCar.parse({car_license, brand, model, color, manufacture_year, model_year, km});
 
-            if(!onwer_id) { throw new AuthenticationError("Acesso negado"); }
+            if(!onwer_id) { throw new AuthenticationError("Acesso negado"); };
 
             const aRepository = CarRepositoryPrisma.build(prisma);
             const aService = CarServiceImplementation.build(aRepository);
@@ -40,6 +40,34 @@ export class CarController{
             response.status(resultError.status).json(resultError.body);
         
         }
+    }
+
+    public async update(request: Request, response: Response) {
+
+        try {
+
+            const updateData = validUpdate.parse(request.body);
+
+            const { car_license } = request.params;
+            const owner_id = request.user?.id;
+
+            if(!owner_id) { throw new AuthenticationError("Acesso negado"); };
+        
+            const aRepository = CarRepositoryPrisma.build(prisma);
+            const aService = CarServiceImplementation.build(aRepository);
+
+            const output = await aService.UpdateCar(owner_id, car_license, updateData);
+
+            response.status(200).json(output).send();
+
+        } catch (error) {
+
+            const resultError = handleErrors(error);
+            response.status(resultError.status).json(resultError.body);
+
+        }
+        
+        
     }
 
     public async find(request: Request, response: Response) {

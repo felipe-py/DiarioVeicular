@@ -35,3 +35,5 @@ export const validCar = z.object({
 export const validCarLicenseInput = z.object({
     car_license: validCarLicense
 });
+
+export const validUpdate = validCar.partial();

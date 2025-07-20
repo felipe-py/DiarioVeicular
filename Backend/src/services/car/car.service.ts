@@ -1,3 +1,5 @@
+import { CarProps } from "../../entities/car";
+
 export type CarOutputDto = {
     car_license: string;
     brand: string;
@@ -34,6 +36,8 @@ export interface CarService {
 
     findCarByLicense(car_license: string): Promise<CarOutputDto>;
     
+    updateCar(owner_id: string, car_license: string, updateData: Partial<CarProps>): Promise<UpdateCarOutputDto>;
+
     deleteCarService(car_license: string): Promise<DeleteCarOutputDto>;
 
 }

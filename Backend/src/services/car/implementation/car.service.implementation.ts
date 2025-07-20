@@ -1,7 +1,8 @@
-import { Car } from "../../../entities/car";
+import { Car, CarProps } from "../../../entities/car";
 import { NotFoundError } from "../../../errors/error.NotFoundError";
+import { AuthenticationError } from "../../../errors/user.error.Authentication";
 import { CarRepository } from "../../../repositories/car/car.repository";
-import { CarService, CarOutputDto, DeleteCarOutputDto } from '../car.service';
+import { CarService, CarOutputDto, DeleteCarOutputDto, UpdateCarOutputDto } from '../car.service';
 
 export class CarServiceImplementation implements CarService{
 
@@ -38,6 +39,25 @@ export class CarServiceImplementation implements CarService{
             km: aCar.carKm,
             owner_id: aCar.carOwner,
             message: "Veículo cadastrado com sucesso"
+        };
+
+        return output;
+    }
+
+    public async updateCar(owner_id: string, car_license: string, updateData: Partial<CarProps>): Promise<UpdateCarOutputDto> {
+        
+        const aCar = await this.repository.findByLicense(car_license);
+
+        if(!aCar) { throw new NotFoundError("Veiculo não encontrado para atualização");};
+
+        if(aCar.carOwner != owner_id) { throw new AuthenticationError("Autenticação inválida para a atualização");};
+
+        aCar.update(updateData);
+
+        await this.repository.update(aCar);
+
+        const output: UpdateCarOutputDto = {
+            message: `Veículo: ${car_license} atualizado`
         };
 
         return output;

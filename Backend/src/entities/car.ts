@@ -1,3 +1,5 @@
+import { InvalidCarKm } from "../errors/carKm.error.invalid";
+
 export type CarProps = {
     car_license: string;
     brand: string;
@@ -55,6 +57,15 @@ export class Car {
                 owner_id
             });
         }
+
+    public update(data: Partial<CarProps>): void {
+
+        if(data.km !== undefined && data.km < this.props.km) {
+            throw new InvalidCarKm("A quilometragem não pode ser reduzida");
+        }
+
+        Object.assign(this.props, data);
+    }
 
     public get carLicense() {
         return this.props.car_license;
