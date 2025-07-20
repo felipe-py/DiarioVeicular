@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { UserRepository } from "../user.repository";
 import { User } from "../../../entities/user";
 import { Prisma } from "../../../generated/prisma";
-import { ConflictError } from "../../../errors/user/user.error.conflict";
+import { ConflictError } from "../../../errors/user.error.conflict";
 
 export class UserRepositoryPrisma implements UserRepository {
     private constructor(readonly prisma: PrismaClient) {}

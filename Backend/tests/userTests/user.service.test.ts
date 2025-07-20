@@ -1,10 +1,10 @@
 import { User } from '../../src/entities/user';
 import { UserRepository } from '../../src/repositories/user/user.repository';
 import { UserServiceImplementation } from '../../src/services/user/implementation/user.service.implementation';
-import { ConflictError } from '../../src/errors/user/user.error.conflict';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { AuthenticationError } from '../../src/errors/user.error.Authentication';
+import { ConflictError } from '../../src/errors/user.error.conflict';
 
 // 1. PRIMEIRO MOCK DO REPOSITÓRIO
 // CRIA UMA VERSÃO FALSA DO USER REPOSITORY, jest.fn() cria funções simuladas
