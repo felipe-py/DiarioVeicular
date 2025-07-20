@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { AuthenticationError } from '../errors/user/user.error.Authentication';
+import { AuthenticationError } from '../errors/user.error.Authentication';
 
 interface TokenPayload {
     id: string;

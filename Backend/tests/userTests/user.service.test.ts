@@ -4,7 +4,7 @@ import { UserServiceImplementation } from '../../src/services/user/implementatio
 import { ConflictError } from '../../src/errors/user/user.error.conflict';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { AuthenticationError } from '../../src/errors/user/user.error.Authentication';
+import { AuthenticationError } from '../../src/errors/user.error.Authentication';
 
 // 1. PRIMEIRO MOCK DO REPOSITÓRIO
 // CRIA UMA VERSÃO FALSA DO USER REPOSITORY, jest.fn() cria funções simuladas

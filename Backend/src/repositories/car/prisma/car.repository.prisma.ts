@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { CarRepository } from '../car.repository';
 import { Car } from '../../../entities/car';
 import { Prisma } from '../../../generated/prisma';
-import { ConflictError } from '../../../errors/user/user.error.conflict';
+import { ConflictError } from '../../../errors/user.error.conflict';
 
 export class CarRepositoryPrisma implements CarRepository {
 
@@ -63,11 +63,9 @@ export class CarRepositoryPrisma implements CarRepository {
     
         const carFromDb = await this.prisma.car.findUnique({
             where: { car_license },
-        });
+            });
 
-        if (!carFromDb) { 
-            return null;
-        }
+        if (!carFromDb) { return null };
 
         const { user_id, brand, model, color, manufacture_year, model_year, km } = carFromDb;
 
@@ -83,6 +81,7 @@ export class CarRepositoryPrisma implements CarRepository {
         );
 
         return car;
+        
     }
 
     public async delete(car_license: string): Promise<Car> {
