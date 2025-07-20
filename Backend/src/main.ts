@@ -13,6 +13,7 @@ function main () {
     api.addPostRoute("/users/login", userController.login);
     
     api.addPostRoute("cars/register", authMiddleware, carController.create);
+    api.addGetRoute("cars/findCar", authMiddleware, carController.find);
     api.addDeleteRoute("cars/delete", authMiddleware, carController.delete);
 
     api.start(8000);
