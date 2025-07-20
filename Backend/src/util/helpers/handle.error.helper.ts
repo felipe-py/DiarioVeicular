@@ -1,6 +1,7 @@
 import { ZodError } from "zod";
-import { ConflictError } from "../../errors/user/user.error.conflict";
-import { AuthenticationError } from "../../errors/user/user.error.Authentication";
+import { AuthenticationError } from "../../errors/user.error.Authentication";
+import { ConflictError } from "../../errors/user.error.conflict";
+import { NotFoundError } from "../../errors/error.NotFoundError";
 
 type output = {
     status: number;
@@ -32,6 +33,15 @@ export function handleErrors(error: unknown): output {
     }
 
     if (error instanceof AuthenticationError) {
+        return {
+            status: error.statusCode,
+            body: {
+                message: error.message
+            }
+        }
+    }
+
+     if (error instanceof NotFoundError) {
         return {
             status: error.statusCode,
             body: {
