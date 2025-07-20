@@ -1,4 +1,4 @@
-export type CreateCarOutputDto = {
+export type CarOutputDto = {
     car_license: string;
     brand: string;
     model: string;
@@ -7,6 +7,10 @@ export type CreateCarOutputDto = {
     model_year: string;
     km: number;
     owner_id: string;
+    message: string;
+}
+
+export type UpdateCarOutputDto = {
     message: string;
 }
 
@@ -26,7 +30,10 @@ export interface CarService {
         manufacture_year: string,
         model_year: string,
         km: number,
-        owner_id: string): Promise<CreateCarOutputDto>;
+        owner_id: string): Promise<CarOutputDto>;
 
+    findCarByLicense(car_license: string): Promise<CarOutputDto>;
+    
     deleteCarService(car_license: string): Promise<DeleteCarOutputDto>;
+
 }

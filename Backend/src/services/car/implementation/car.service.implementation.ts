@@ -1,6 +1,7 @@
 import { Car } from "../../../entities/car";
+import { NotFoundError } from "../../../errors/error.NotFoundError";
 import { CarRepository } from "../../../repositories/car/car.repository";
-import { CarService, CreateCarOutputDto, DeleteCarOutputDto } from '../car.service';
+import { CarService, CarOutputDto, DeleteCarOutputDto } from '../car.service';
 
 export class CarServiceImplementation implements CarService{
 
@@ -12,7 +13,7 @@ export class CarServiceImplementation implements CarService{
 
     public async createCarService(car_license: string, brand: string, 
         model: string, color: string, manufacture_year: string, 
-        model_year: string, km: number, owner_id: string): Promise<CreateCarOutputDto> {
+        model_year: string, km: number, owner_id: string): Promise<CarOutputDto> {
         
             const aCar = Car.create(
                 car_license,
@@ -27,7 +28,7 @@ export class CarServiceImplementation implements CarService{
 
         await this.repository.save(aCar);
 
-        const output: CreateCarOutputDto = {
+        const output: CarOutputDto = {
             car_license: aCar.carLicense,
             brand: aCar.carBrand,
             model: aCar.carModel,
@@ -42,6 +43,27 @@ export class CarServiceImplementation implements CarService{
         return output;
     }
 
+    public async findCarByLicense(car_license: string): Promise<CarOutputDto> {
+        
+        const aCar = await this.repository.findByLicense(car_license);
+
+        if (!aCar) { throw new NotFoundError("Veículo não encontrado")};
+
+        const output: CarOutputDto = {
+            car_license: aCar.carLicense,
+            brand: aCar.carBrand,
+            model: aCar.carModel,
+            color: aCar.carColor,
+            manufacture_year: aCar.carManufactureYear,
+            model_year: aCar.carModelYear,
+            km: aCar.carKm,
+            owner_id: aCar.carOwner,
+            message: "Informações do veículo foram encontradas com sucesso"
+        }
+
+        return output;
+    }
+
     public async deleteCarService(car_license: string): Promise<DeleteCarOutputDto> {
         
         const deletedCar = await this.repository.delete(car_license);
@@ -49,7 +71,7 @@ export class CarServiceImplementation implements CarService{
         const output: DeleteCarOutputDto = {
             car_license: deletedCar.carLicense,
             owner_id: deletedCar.carOwner,
-            message: "Registro do veículo excluído com sucessor"
+            message: "Registro do veículo excluído com sucesso"
         };
 
         return output;
