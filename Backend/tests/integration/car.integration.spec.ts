@@ -42,7 +42,7 @@ describe('POST /cars - Teste de Integração para Criação de Veículo', () => 
         await prismaTestClient.$disconnect();
     });
 
-    // O teste em si
+    // TESTES DE REGISTRO DE VEÍCULO
     it('deve criar um novo veículo com sucesso para um usuário autenticado', async () => {
         // Arrange: Dados do novo carro
         const carData = {
@@ -63,7 +63,7 @@ describe('POST /cars - Teste de Integração para Criação de Veículo', () => 
 
         // Assert (Afirmar): Parte 1 - Checar a resposta da API
         expect(response.status).toBe(201); // O status code deve ser 201 Created
-        expect(response.body.message).toBe("Veículo criado com sucesso!");
+        expect(response.body.message).toBe("Veículo cadastrado com sucesso");
         expect(response.body.car).toBeDefined();
         expect(response.body.car.car_license).toBe(carData.car_license);
 
@@ -80,7 +80,7 @@ describe('POST /cars - Teste de Integração para Criação de Veículo', () => 
     it('deve retornar 401 Unauthorized se nenhum token for fornecido', async () => {
         // Arrange: Dados do carro, mas sem token
         const carData = {
-            car_license: 'FAIL123',
+            car_license: 'FAI1123',
             brand: 'VW',
             model: 'Gol',
             color: 'Branco',
@@ -97,4 +97,141 @@ describe('POST /cars - Teste de Integração para Criação de Veículo', () => 
         // Assert
         expect(response.status).toBe(401);
     });
+
+
+    // TESTES DE ATUALIZAÇÃO DE VEÍCULO
+    it('deve retornar 200 para informação do veículo atualizada com sucesso', async () => {
+
+        const carData = {
+            car_license: 'JSI0G39',
+            brand: 'Toyota',
+            model: 'Corolla xli 1.8 AT',
+            color: 'Prata',
+            manufacture_year: '2009',
+            model_year: '2010',
+            km: 144995,
+        };
+
+        await request(app)
+            .post('/cars/register') // A rota da sua API
+            .set('Authorization', `Bearer ${userToken}`) // Envia o token de autenticação
+            .send(carData); // Envia os dados do carro no corpo
+        
+        const updateData = {
+            "km": 145102
+        }
+        
+        const response = await request(app)
+            .patch("/cars/update/JSI0G39")
+            .set('Authorization', `Bearer ${userToken}`)
+            .send(updateData);
+        
+        const carInDb = await prismaTestClient.car.findUnique({
+            where: { car_license: carData.car_license },
+        });
+
+        expect(carInDb).not.toBeNull();
+
+        expect(response.status).toBe(200);
+        expect(carInDb!.km).toBe(145102);
+    });
+
+    it('deve retornar 400 para erro em atualizar quilometragem do carro', async () => {
+
+        const carData = {
+            car_license: 'JSI0G39',
+            brand: 'Toyota',
+            model: 'Corolla xli 1.8 AT',
+            color: 'Prata',
+            manufacture_year: '2009',
+            model_year: '2010',
+            km: 144995,
+        };
+
+        await request(app)
+            .post('/cars/register') // A rota da sua API
+            .set('Authorization', `Bearer ${userToken}`) // Envia o token de autenticação
+            .send(carData); // Envia os dados do carro no corpo
+        
+        const updateData = {
+            "km": 141257
+        }
+        
+        const response = await request(app)
+            .patch("/cars/update/JSI0G39")
+            .set('Authorization', `Bearer ${userToken}`)
+            .send(updateData);
+        
+        const carInDb = await prismaTestClient.car.findUnique({
+            where: { car_license: carData.car_license },
+        });
+
+        expect(carInDb).not.toBeNull();
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("A quilometragem não pode ser reduzida");
+        expect(carInDb!.km).toBe(145102);
+    });
+
+
+    // TESTES DE BUSCA DE UM VEÍCULO
+    it('deve retornar 201 juntamente com o automóvel pesquisado', async () => {
+
+        const carData = {
+            car_license: 'JRN7771',
+            brand: 'vw',
+            model: 'Polo 1.6',
+            color: 'verde',
+            manufacture_year: '2008',
+            model_year: '2009',
+            km: 185247,
+        };
+
+        await request(app)
+            .post('/cars/register') // A rota da sua API
+            .set('Authorization', `Bearer ${userToken}`) // Envia o token de autenticação
+            .send(carData); // Envia os dados do carro no corpo
+
+        const response = await request(app)
+            .get('/cars/findCar') // A rota da sua API
+            .set('Authorization', `Bearer ${userToken}`) // Envia o token de autenticação
+            .send({"car_license": "JRN7771"});
+
+        const carInDb = await prismaTestClient.car.findUnique({
+            where: { car_license: carData.car_license },
+        });
+
+        expect(carInDb).not.toBeNull();
+
+        expect(response.status).toBe(201);
+        expect(carInDb!.car_license).toBe("JRN7771");
+    });
+
+
+    // TESTE PARA DELETAR VEÍCULO REGISTRADO
+    it('deve retornar 201 atestanto que o carro foi apagado', async () => {
+
+        const carData = {
+            car_license: 'JRN7771',
+            brand: 'vw',
+            model: 'Polo 1.6',
+            color: 'verde',
+            manufacture_year: '2008',
+            model_year: '2009',
+            km: 185247,
+        };
+
+        await request(app)
+            .post('/cars/register') // A rota da sua API
+            .set('Authorization', `Bearer ${userToken}`) // Envia o token de autenticação
+            .send(carData); // Envia os dados do carro no corpo
+
+        const response = await request(app)
+            .delete('/cars/delete') // A rota da sua API
+            .set('Authorization', `Bearer ${userToken}`) // Envia o token de autenticação
+            .send({"car_license": "JRN7771"});
+
+        expect(response.status).toBe(201);
+    });
+
 });
