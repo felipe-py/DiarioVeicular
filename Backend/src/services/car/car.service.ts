@@ -1,14 +1,16 @@
 import { CarProps } from "../../entities/car";
 
 export type CarOutputDto = {
-    car_license: string;
-    brand: string;
-    model: string;
-    color: string;
-    manufacture_year: string;
-    model_year: string;
-    km: number;
-    owner_id: string;
+    car: {
+        car_license: string;
+        brand: string;
+        model: string;
+        color: string;
+        manufacture_year: string;
+        model_year: string;
+        km: number;
+        owner_id: string;
+    }
     message: string;
 }
 
@@ -18,7 +20,6 @@ export type UpdateCarOutputDto = {
 
 export type DeleteCarOutputDto = {
     car_license: string;
-    owner_id: string;
     message: string;
 }
 

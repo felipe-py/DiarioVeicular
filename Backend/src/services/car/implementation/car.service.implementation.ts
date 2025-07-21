@@ -30,14 +30,16 @@ export class CarServiceImplementation implements CarService{
         await this.repository.save(aCar);
 
         const output: CarOutputDto = {
-            car_license: aCar.carLicense,
-            brand: aCar.carBrand,
-            model: aCar.carModel,
-            color: aCar.carColor,
-            manufacture_year: aCar.carManufactureYear,
-            model_year: aCar.carModelYear,
-            km: aCar.carKm,
-            owner_id: aCar.carOwner,
+            car: {
+                car_license: aCar.carLicense,
+                brand: aCar.carBrand,
+                model: aCar.carModel,
+                color: aCar.carColor,
+                manufacture_year: aCar.carManufactureYear,
+                model_year: aCar.carModelYear,
+                km: aCar.carKm,
+                owner_id: aCar.carOwner
+            },
             message: "Veículo cadastrado com sucesso"
         };
 
@@ -70,14 +72,16 @@ export class CarServiceImplementation implements CarService{
         if (!aCar) { throw new NotFoundError("Veículo não encontrado")};
 
         const output: CarOutputDto = {
-            car_license: aCar.carLicense,
-            brand: aCar.carBrand,
-            model: aCar.carModel,
-            color: aCar.carColor,
-            manufacture_year: aCar.carManufactureYear,
-            model_year: aCar.carModelYear,
-            km: aCar.carKm,
-            owner_id: aCar.carOwner,
+            car: {
+                car_license: aCar.carLicense,
+                brand: aCar.carBrand,
+                model: aCar.carModel,
+                color: aCar.carColor,
+                manufacture_year: aCar.carManufactureYear,
+                model_year: aCar.carModelYear,
+                km: aCar.carKm,
+                owner_id: aCar.carOwner
+            },
             message: "Informações do veículo foram encontradas com sucesso"
         }
 
@@ -86,11 +90,10 @@ export class CarServiceImplementation implements CarService{
 
     public async deleteCarService(car_license: string): Promise<DeleteCarOutputDto> {
         
-        const deletedCar = await this.repository.delete(car_license);
+        await this.repository.delete(car_license);
 
         const output: DeleteCarOutputDto = {
-            car_license: deletedCar.carLicense,
-            owner_id: deletedCar.carOwner,
+            car_license: car_license,
             message: "Registro do veículo excluído com sucesso"
         };
 
