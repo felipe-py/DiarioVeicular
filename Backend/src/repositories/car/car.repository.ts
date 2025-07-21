@@ -4,5 +4,5 @@ export interface CarRepository {
     save(car: Car): Promise<void>;
     update(car: Car): Promise<void>;
     findByLicense(car_license: string): Promise<Car | null>;
-    delete(car_license: string): Promise<Car>;
+    delete(car_license: string): Promise<void>;
 }

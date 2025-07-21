@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { CarRepository } from '../car.repository';
 import { Car } from '../../../entities/car';
-import { Prisma } from '../../../generated/prisma';
 import { ConflictError } from '../../../errors/user.error.conflict';
 
 export class CarRepositoryPrisma implements CarRepository {
@@ -84,17 +83,16 @@ export class CarRepositoryPrisma implements CarRepository {
         
     }
 
-    public async delete(car_license: string): Promise<Car> {
+    public async delete(car_license: string): Promise<void> {
 
         try {
 
-            const deleteCar = await this.prisma.car.delete({
+            await this.prisma.car.delete({
                 where: {
                     car_license: car_license,
                 },
             });
 
-            return deleteCar;
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
