@@ -1,27 +1,13 @@
+// tsconfig.app.json
 {
+  "extends": "./tsconfig.json", // Herda as configurações base do arquivo principal
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "composite": true,
+    "jsx": "react-jsx", // A configuração mais importante: ensina o TS a entender React
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // Garante que tipos do navegador sejam conhecidos
+    "noEmit": true, // Essencial para o Vite, que cuida da transpilação
     "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "moduleResolution": "bundler"
   },
-  "include": ["src"]
+  "include": ["src"] // Aplica estas regras apenas à pasta 'src'
 }
