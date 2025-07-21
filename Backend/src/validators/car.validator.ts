@@ -27,7 +27,7 @@ export const validCar = z.object({
     brand: nonEmptyString,
     model: nonEmptyString,
     color: nonEmptyString,
-    manufactureYear: validYear,
+    manufacture_year: validYear,
     model_year: validYear,
     km: validKm
 });
