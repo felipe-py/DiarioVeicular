@@ -12,10 +12,10 @@ function main () {
     api.addPostRoute("/users/register", userController.create);
     api.addPostRoute("/users/login", userController.login);
     
-    api.addPostRoute("cars/register", authMiddleware, carController.create);
-    api.addPatchRoute("cars/update", authMiddleware, carController.update);
-    api.addGetRoute("cars/findCar", authMiddleware, carController.find);
-    api.addDeleteRoute("cars/delete", authMiddleware, carController.delete);
+    api.addPostRoute("/cars/register", authMiddleware, carController.create);
+    api.addPatchRoute("/cars/update/:car_license", authMiddleware, carController.update);
+    api.addGetRoute("/cars/findCar", authMiddleware, carController.find);
+    api.addDeleteRoute("/cars/delete", authMiddleware, carController.delete);
 
     api.start(8000);
 }
