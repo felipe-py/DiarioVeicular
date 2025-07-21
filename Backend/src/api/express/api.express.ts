@@ -17,6 +17,10 @@ export class ApiExpress implements Api {
         return new ApiExpress(app);
     }
 
+    public get expressApp(): Express {
+        return this.app;
+    }
+
     public addGetRoute(
         path: string,
         ...handlers: RequestHandler[]): void {
