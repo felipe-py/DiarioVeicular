@@ -56,7 +56,7 @@ export class CarController{
             const aRepository = CarRepositoryPrisma.build(prisma);
             const aService = CarServiceImplementation.build(aRepository);
 
-            const output = await aService.UpdateCar(owner_id, car_license, updateData);
+            const output = await aService.updateCar(owner_id, car_license, updateData);
 
             response.status(200).json(output).send();
 
