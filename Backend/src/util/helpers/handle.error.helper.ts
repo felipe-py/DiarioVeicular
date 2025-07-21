@@ -2,6 +2,7 @@ import { ZodError } from "zod";
 import { AuthenticationError } from "../../errors/user.error.Authentication";
 import { ConflictError } from "../../errors/user.error.conflict";
 import { NotFoundError } from "../../errors/error.NotFoundError";
+import { InvalidCarKm } from "../../errors/carKm.error.invalid";
 
 type output = {
     status: number;
@@ -41,7 +42,16 @@ export function handleErrors(error: unknown): output {
         }
     }
 
-     if (error instanceof NotFoundError) {
+    if (error instanceof NotFoundError) {
+        return {
+            status: error.statusCode,
+            body: {
+                message: error.message
+            }
+        }
+    }
+
+    if (error instanceof InvalidCarKm) {
         return {
             status: error.statusCode,
             body: {
