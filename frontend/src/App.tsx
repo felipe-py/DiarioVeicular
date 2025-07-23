@@ -1,20 +1,20 @@
-import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React from "react";
+import { Link, Outlet } from "react-router-dom";
 
 function App() {
   return (
     <div>
       <header>
         <nav>
-          <ul style={{ listStyle: 'none', display: 'flex', gap: '1rem' }}>
+          <ul style={{ listStyle: "none", display: "flex", gap: "1rem" }}>
             <li>
               <Link to="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/users/login">Login</Link>
             </li>
             <li>
-              <Link to="/register">Registro</Link>
+              <Link to="/users/register">Registro</Link>
             </li>
           </ul>
         </nav>
