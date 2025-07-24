@@ -7,12 +7,13 @@ import {
 } from "../validators/user.validator";
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as S from "./Register.styles";
 
 export function RegisterPage() {
   const [apiMessage, setApiMessage] = useState<string>("");
   const [apiError, setApiError] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -31,7 +32,17 @@ export function RegisterPage() {
         "http://localhost:8000/users/register",
         data
       );
-      setApiMessage(response.data.message);
+
+      const { token } = response.data;
+
+      if (token) {
+        localStorage.setItem("authToken", token);
+      }
+
+      setApiMessage(response.data.message + " Redirecionando...");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
     } catch (error) {
       setApiError(true);
       // Tratamento de erro mais seguro, sem 'any'
@@ -45,7 +56,6 @@ export function RegisterPage() {
     }
   }
 
-  // AQUI ESTÁ A PARTE CRÍTICA: A FUNÇÃO PRECISA DESTE 'RETURN'
   return (
     <S.PageContainer>
       <S.FormContainer>
