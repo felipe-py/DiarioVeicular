@@ -105,7 +105,7 @@ export class CarController {
 
       const output = await aService.findCarByLicense(car_license);
 
-      response.status(201).json(output).send();
+      response.status(200).json(output).send();
     } catch (error) {
       const resultError = handleErrors(error);
       response.status(resultError.status).json(resultError.body);
@@ -125,7 +125,7 @@ export class CarController {
 
       const output = await aService.findCarByOwner(owner_id);
 
-      response.status(201).json(output).send();
+      response.status(200).json(output).send();
     } catch (error) {
       const resultError = handleErrors(error);
       response.status(resultError.status).json(resultError.body);
