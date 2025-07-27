@@ -54,12 +54,12 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
   it("deve criar um novo veículo com sucesso para um usuário autenticado", async () => {
     // Arrange: Dados do novo carro
     const carData = {
-      car_license: "BRA2E19",
+      carLicense: "BRA2E19",
       brand: "Honda",
       model: "Civic",
       color: "Preto",
-      manufacture_year: "2023",
-      model_year: "2023",
+      manufactureYear: "2023",
+      modelYear: "2023",
       km: 15000,
     };
 
@@ -73,27 +73,27 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
     expect(response.status).toBe(201); // O status code deve ser 201 Created
     expect(response.body.message).toBe("Veículo cadastrado com sucesso");
     expect(response.body.car).toBeDefined();
-    expect(response.body.car.car_license).toBe(carData.car_license);
+    expect(response.body.car.carLicense).toBe(carData.carLicense);
 
     // Assert (Afirmar): Parte 2 - Checar diretamente no banco de dados de teste
     const carInDb = await prismaTestClient.car.findUnique({
-      where: { car_license: carData.car_license },
+      where: { carLicense: carData.carLicense },
     });
 
     expect(carInDb).not.toBeNull(); // O carro não pode ser nulo no banco
     expect(carInDb?.model).toBe(carData.model);
-    expect(carInDb?.user_id).toBe(userId); // Verifica se o carro foi associado ao usuário correto
+    expect(carInDb?.userId).toBe(userId); // Verifica se o carro foi associado ao usuário correto
   });
 
   it("deve retornar 401 Unauthorized se nenhum token for fornecido", async () => {
     // Arrange: Dados do carro, mas sem token
     const carData = {
-      car_license: "FAI1123",
+      carLicense: "FAI1123",
       brand: "VW",
       model: "Gol",
       color: "Branco",
-      manufacture_year: "2020",
-      model_year: "2020",
+      manufactureYear: "2020",
+      modelYear: "2020",
       km: 50000,
     };
 
@@ -107,12 +107,12 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
   // TESTES DE ATUALIZAÇÃO DE VEÍCULO
   it("deve retornar 200 para informação do veículo atualizada com sucesso", async () => {
     const carData = {
-      car_license: "JSI0G39",
+      carLicense: "JSI0G39",
       brand: "Toyota",
       model: "Corolla xli 1.8 AT",
       color: "Prata",
-      manufacture_year: "2009",
-      model_year: "2010",
+      manufactureYear: "2009",
+      modelYear: "2010",
       km: 144995,
     };
 
@@ -131,7 +131,7 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
       .send(updateData);
 
     const carInDb = await prismaTestClient.car.findUnique({
-      where: { car_license: carData.car_license },
+      where: { carLicense: carData.carLicense },
     });
 
     expect(carInDb).not.toBeNull();
@@ -142,12 +142,12 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
 
   it("deve retornar 400 para erro em atualizar quilometragem do carro", async () => {
     const carData = {
-      car_license: "JSI0G39",
+      carLicense: "JSI0G39",
       brand: "Toyota",
       model: "Corolla xli 1.8 AT",
       color: "Prata",
-      manufacture_year: "2009",
-      model_year: "2010",
+      manufactureYear: "2009",
+      modelYear: "2010",
       km: 144995,
     };
 
@@ -166,7 +166,7 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
       .send(updateData);
 
     const carInDb = await prismaTestClient.car.findUnique({
-      where: { car_license: carData.car_license },
+      where: { carLicense: carData.carLicense },
     });
 
     expect(carInDb).not.toBeNull();
@@ -179,12 +179,12 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
   // TESTES DE BUSCA DE UM VEÍCULO UTILIZANDO PLACA
   it("deve retornar 200 juntamente com o automóvel pesquisado", async () => {
     const carData = {
-      car_license: "JRN7771",
+      carLicense: "JRN7771",
       brand: "vw",
       model: "Polo 1.6",
       color: "verde",
-      manufacture_year: "2008",
-      model_year: "2009",
+      manufactureYear: "2008",
+      modelYear: "2009",
       km: 185247,
     };
 
@@ -196,27 +196,27 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
     const response = await request(app)
       .get("/cars/findCar") // A rota da sua API
       .set("Authorization", `Bearer ${userToken}`) // Envia o token de autenticação
-      .send({ car_license: "JRN7771" });
+      .send({ carLicense: "JRN7771" });
 
     const carInDb = await prismaTestClient.car.findUnique({
-      where: { car_license: carData.car_license },
+      where: { carLicense: carData.carLicense },
     });
 
     expect(carInDb).not.toBeNull();
 
     expect(response.status).toBe(200);
-    expect(carInDb!.car_license).toBe("JRN7771");
+    expect(carInDb!.carLicense).toBe("JRN7771");
   });
 
   // TESTE DE BUSCA DE TODOS OS VEÍCULOS DE UM PROPRIETÁRIO
   it("deve retornar 200 juntamente com todos os automóveis do usuário", async () => {
     const carData = {
-      car_license: "JRN7771",
+      carLicense: "JRN7771",
       brand: "vw",
       model: "Polo 1.6",
       color: "verde",
-      manufacture_year: "2008",
-      model_year: "2009",
+      manufactureYear: "2008",
+      modelYear: "2009",
       km: 185247,
     };
 
@@ -236,12 +236,12 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
   // TESTE PARA DELETAR VEÍCULO REGISTRADO
   it("deve retornar 201 atestanto que o carro foi apagado", async () => {
     const carData = {
-      car_license: "JRN7771",
+      carLicense: "JRN7771",
       brand: "vw",
       model: "Polo 1.6",
       color: "verde",
-      manufacture_year: "2008",
-      model_year: "2009",
+      manufactureYear: "2008",
+      modelYear: "2009",
       km: 185247,
     };
 
@@ -253,7 +253,7 @@ describe("POST /cars - Teste de Integração para Criação de Veículo", () => 
     const response = await request(app)
       .delete("/cars/delete") // A rota da sua API
       .set("Authorization", `Bearer ${userToken}`) // Envia o token de autenticação
-      .send({ car_license: "JRN7771" });
+      .send({ carLicense: "JRN7771" });
 
     expect(response.status).toBe(201);
   });

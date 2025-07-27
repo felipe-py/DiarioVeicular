@@ -18,31 +18,24 @@ export class CarController {
   }
 
   public async create(request: Request, response: Response) {
-    const {
-      car_license,
-      brand,
-      model,
-      color,
-      manufacture_year,
-      model_year,
-      km,
-    } = request.body;
+    const { carLicense, brand, model, color, manufactureYear, modelYear, km } =
+      request.body;
 
     // DESTA FORMA ELE PEGA O ID DIRETEMENTE DO TOKEN JWT
-    const onwer_id = request.user?.id;
+    const ownerId = request.user?.id;
 
     try {
       validCar.parse({
-        car_license,
+        carLicense,
         brand,
         model,
         color,
-        manufacture_year,
-        model_year,
+        manufactureYear,
+        modelYear,
         km,
       });
 
-      if (!onwer_id) {
+      if (!ownerId) {
         throw new AuthenticationError("Acesso negado");
       }
 
@@ -50,14 +43,14 @@ export class CarController {
       const aService = CarServiceImplementation.build(aRepository);
 
       const output = await aService.createCarService(
-        car_license,
+        carLicense,
         brand,
         model,
         color,
-        manufacture_year,
-        model_year,
+        manufactureYear,
+        modelYear,
         km,
-        onwer_id
+        ownerId
       );
 
       response.status(201).json(output).send();
@@ -71,21 +64,17 @@ export class CarController {
     try {
       const updateData = validUpdate.parse(request.body);
 
-      const { car_license } = request.params;
-      const owner_id = request.user?.id;
+      const { carLicense } = request.params;
+      const ownerId = request.user?.id;
 
-      if (!owner_id) {
+      if (!ownerId) {
         throw new AuthenticationError("Acesso negado");
       }
 
       const aRepository = CarRepositoryPrisma.build(prisma);
       const aService = CarServiceImplementation.build(aRepository);
 
-      const output = await aService.updateCar(
-        owner_id,
-        car_license,
-        updateData
-      );
+      const output = await aService.updateCar(ownerId, carLicense, updateData);
 
       response.status(200).json(output).send();
     } catch (error) {
@@ -95,15 +84,15 @@ export class CarController {
   }
 
   public async find(request: Request, response: Response) {
-    const { car_license } = request.body;
+    const { carLicense } = request.body;
 
-    validCarLicenseInput.parse({ car_license });
+    validCarLicenseInput.parse({ carLicense });
 
     try {
       const aRepository = CarRepositoryPrisma.build(prisma);
       const aService = CarServiceImplementation.build(aRepository);
 
-      const output = await aService.findCarByLicense(car_license);
+      const output = await aService.findCarByLicense(carLicense);
 
       response.status(200).json(output).send();
     } catch (error) {
@@ -113,9 +102,9 @@ export class CarController {
   }
 
   public async findByOwner(request: Request, response: Response) {
-    const owner_id = request.user?.id;
+    const ownerId = request.user?.id;
 
-    if (!owner_id) {
+    if (!ownerId) {
       throw new AuthenticationError("Acesso negado");
     }
 
@@ -123,7 +112,7 @@ export class CarController {
       const aRepository = CarRepositoryPrisma.build(prisma);
       const aService = CarServiceImplementation.build(aRepository);
 
-      const output = await aService.findCarByOwner(owner_id);
+      const output = await aService.findCarByOwner(ownerId);
 
       response.status(200).json(output).send();
     } catch (error) {
@@ -133,15 +122,15 @@ export class CarController {
   }
 
   public async delete(request: Request, response: Response) {
-    const { car_license } = request.body;
+    const { carLicense } = request.body;
 
-    validCarLicenseInput.parse({ car_license });
+    validCarLicenseInput.parse({ carLicense });
 
     try {
       const aRepository = CarRepositoryPrisma.build(prisma);
       const aService = CarServiceImplementation.build(aRepository);
 
-      const output = await aService.deleteCarService(car_license);
+      const output = await aService.deleteCarService(carLicense);
 
       response.status(201).json(output).send();
     } catch (error) {

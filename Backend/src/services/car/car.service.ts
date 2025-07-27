@@ -2,27 +2,27 @@ import { CarProps } from "../../entities/car";
 
 export type CarOutputDto = {
   car: {
-    car_license: string;
+    carLicense: string;
     brand: string;
     model: string;
     color: string;
-    manufacture_year: string;
-    model_year: string;
+    manufactureYear: string;
+    modelYear: string;
     km: number;
-    owner_id: string;
+    ownerId: string;
   };
   message: string;
 };
 
 type allCars = {
-  car_license: string;
+  carLicense: string;
   brand: string;
   model: string;
   color: string;
-  manufacture_year: string;
-  model_year: string;
+  manufactureYear: string;
+  modelYear: string;
   km: number;
-  owner_id: string;
+  ownerId: string;
 };
 
 export type ManyCarsOutputDto = {
@@ -35,31 +35,31 @@ export type UpdateCarOutputDto = {
 };
 
 export type DeleteCarOutputDto = {
-  car_license: string;
+  carLicense: string;
   message: string;
 };
 
 export interface CarService {
   createCarService(
-    car_license: string,
+    carLicense: string,
     brand: string,
     model: string,
     color: string,
-    manufacture_year: string,
-    model_year: string,
+    manufactureYear: string,
+    modelYear: string,
     km: number,
-    owner_id: string
+    ownerId: string
   ): Promise<CarOutputDto>;
 
-  findCarByLicense(car_license: string): Promise<CarOutputDto>;
+  findCarByLicense(carLicense: string): Promise<CarOutputDto>;
 
-  findCarByOwner(owner_id: string): Promise<ManyCarsOutputDto>;
+  findCarByOwner(ownerId: string): Promise<ManyCarsOutputDto>;
 
   updateCar(
-    owner_id: string,
-    car_license: string,
+    ownerId: string,
+    carLicense: string,
     updateData: Partial<CarProps>
   ): Promise<UpdateCarOutputDto>;
 
-  deleteCarService(car_license: string): Promise<DeleteCarOutputDto>;
+  deleteCarService(carLicense: string): Promise<DeleteCarOutputDto>;
 }

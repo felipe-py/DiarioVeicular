@@ -18,38 +18,38 @@ export class CarServiceImplementation implements CarService {
   }
 
   public async createCarService(
-    car_license: string,
+    carLicense: string,
     brand: string,
     model: string,
     color: string,
-    manufacture_year: string,
-    model_year: string,
+    manufactureYear: string,
+    modelYear: string,
     km: number,
-    owner_id: string
+    ownerId: string
   ): Promise<CarOutputDto> {
     const aCar = Car.create(
-      car_license,
+      carLicense,
       brand,
       model,
       color,
-      manufacture_year,
-      model_year,
+      manufactureYear,
+      modelYear,
       km,
-      owner_id
+      ownerId
     );
 
     await this.repository.save(aCar);
 
     const output: CarOutputDto = {
       car: {
-        car_license: aCar.carLicense,
+        carLicense: aCar.carLicense,
         brand: aCar.carBrand,
         model: aCar.carModel,
         color: aCar.carColor,
-        manufacture_year: aCar.carManufactureYear,
-        model_year: aCar.carModelYear,
+        manufactureYear: aCar.carManufactureYear,
+        modelYear: aCar.carModelYear,
         km: aCar.carKm,
-        owner_id: aCar.carOwner,
+        ownerId: aCar.carOwner,
       },
       message: "Veículo cadastrado com sucesso",
     };
@@ -58,17 +58,17 @@ export class CarServiceImplementation implements CarService {
   }
 
   public async updateCar(
-    owner_id: string,
-    car_license: string,
+    ownerId: string,
+    carLicense: string,
     updateData: Partial<CarProps>
   ): Promise<UpdateCarOutputDto> {
-    const aCar = await this.repository.findByLicense(car_license);
+    const aCar = await this.repository.findByLicense(carLicense);
 
     if (!aCar) {
       throw new NotFoundError("Veiculo não encontrado para atualização");
     }
 
-    if (aCar.carOwner != owner_id) {
+    if (aCar.carOwner != ownerId) {
       throw new AuthenticationError("Autenticação inválida para a atualização");
     }
 
@@ -77,14 +77,14 @@ export class CarServiceImplementation implements CarService {
     await this.repository.update(aCar);
 
     const output: UpdateCarOutputDto = {
-      message: `Veículo: ${car_license} atualizado`,
+      message: `Veículo: ${carLicense} atualizado`,
     };
 
     return output;
   }
 
-  public async findCarByLicense(car_license: string): Promise<CarOutputDto> {
-    const aCar = await this.repository.findByLicense(car_license);
+  public async findCarByLicense(carLicense: string): Promise<CarOutputDto> {
+    const aCar = await this.repository.findByLicense(carLicense);
 
     if (!aCar) {
       throw new NotFoundError("Veículo não encontrado");
@@ -92,14 +92,14 @@ export class CarServiceImplementation implements CarService {
 
     const output: CarOutputDto = {
       car: {
-        car_license: aCar.carLicense,
+        carLicense: aCar.carLicense,
         brand: aCar.carBrand,
         model: aCar.carModel,
         color: aCar.carColor,
-        manufacture_year: aCar.carManufactureYear,
-        model_year: aCar.carModelYear,
+        manufactureYear: aCar.carManufactureYear,
+        modelYear: aCar.carModelYear,
         km: aCar.carKm,
-        owner_id: aCar.carOwner,
+        ownerId: aCar.carOwner,
       },
       message: "Informações do veículo foram encontradas com sucesso",
     };
@@ -107,22 +107,22 @@ export class CarServiceImplementation implements CarService {
     return output;
   }
 
-  public async findCarByOwner(owner_id: string): Promise<ManyCarsOutputDto> {
-    const allCarsFromUser = await this.repository.findByOwner(owner_id);
+  public async findCarByOwner(ownerId: string): Promise<ManyCarsOutputDto> {
+    const allCarsFromUser = await this.repository.findByOwner(ownerId);
 
     if (!allCarsFromUser) {
       throw new NotFoundError("Não foram encontrados veículos");
     }
 
     const props = allCarsFromUser.map((aCar) => ({
-      car_license: aCar.carLicense,
+      carLicense: aCar.carLicense,
       brand: aCar.carBrand,
       model: aCar.carModel,
       color: aCar.carColor,
-      manufacture_year: aCar.carManufactureYear,
-      model_year: aCar.carModelYear,
+      manufactureYear: aCar.carManufactureYear,
+      modelYear: aCar.carModelYear,
       km: aCar.carKm,
-      owner_id: aCar.carOwner,
+      ownerId: aCar.carOwner,
     }));
 
     const output: ManyCarsOutputDto = {
@@ -134,12 +134,12 @@ export class CarServiceImplementation implements CarService {
   }
 
   public async deleteCarService(
-    car_license: string
+    carLicense: string
   ): Promise<DeleteCarOutputDto> {
-    await this.repository.delete(car_license);
+    await this.repository.delete(carLicense);
 
     const output: DeleteCarOutputDto = {
-      car_license: car_license,
+      carLicense: carLicense,
       message: "Registro do veículo excluído com sucesso",
     };
 

@@ -39,14 +39,14 @@ export class CarRepositoryPrisma implements CarRepository {
 
   public async update(car: Car): Promise<void> {
     const data = {
-      car_license: car.carLicense,
+      carLicense: car.carLicense,
       brand: car.carBrand,
       model: car.carModel,
       color: car.carColor,
-      manufacture_year: car.carManufactureYear,
-      model_year: car.carModelYear,
+      manufactureYear: car.carManufactureYear,
+      modelYear: car.carModelYear,
       km: car.carKm,
-      user_id: car.carOwner,
+      userId: car.carOwner,
     };
 
     await this.prisma.car.update({
@@ -83,10 +83,10 @@ export class CarRepositoryPrisma implements CarRepository {
     return car;
   }
 
-  public async findByOwner(owner_id: string): Promise<Car[] | null> {
+  public async findByOwner(ownerId: string): Promise<Car[] | null> {
     const cars = await this.prisma.car.findMany({
       where: {
-        userId: owner_id,
+        userId: ownerId,
       },
     });
 

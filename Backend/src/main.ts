@@ -17,7 +17,7 @@ api.addPostRoute("/users/login", userController.login);
 
 api.addPostRoute("/cars/register", authMiddleware, carController.create);
 api.addPatchRoute(
-  "/cars/update/:car_license",
+  "/cars/update/:carLicense",
   authMiddleware,
   carController.update
 );

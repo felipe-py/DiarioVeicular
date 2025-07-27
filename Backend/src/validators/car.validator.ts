@@ -1,39 +1,40 @@
-import * as z from "zod"
+import * as z from "zod";
 
-const nonEmptyString = z.string({
+const nonEmptyString = z
+  .string({
     required_error: "Este campo é obrigatório.",
     invalid_type_error: "Este campo deve ser um texto.",
-}).min(1, { message: "Este campo não pode estar vazio"});
+  })
+  .min(1, { message: "Este campo não pode estar vazio" });
 
-const validCarLicense = z.string().regex(
-    /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/i, {
-        message: "Formato inválido. Use padrão ABC-1234 ou ABC-1D23."
-    }
-);
+const validCarLicense = z.string().regex(/^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/i, {
+  message: "Formato inválido. Use padrão ABC-1234 ou ABC-1D23.",
+});
 
-const validYear = z.string().regex(
-    /^\d{4}$/, {
-        message: "O ano deve conter 4 dígitos."
-    }
-);
+const validYear = z.string().regex(/^\d{4}$/, {
+  message: "O ano deve conter 4 dígitos.",
+});
 
-const validKm = z.number({
+const validKm = z
+  .number({
     required_error: "A quilometragem é obrigatória.",
-    invalid_type_error: "A quilometragem deve ser um  número"
-}).int().positive()
+    invalid_type_error: "A quilometragem deve ser um  número",
+  })
+  .int()
+  .positive();
 
 export const validCar = z.object({
-    car_license: validCarLicense,
-    brand: nonEmptyString,
-    model: nonEmptyString,
-    color: nonEmptyString,
-    manufacture_year: validYear,
-    model_year: validYear,
-    km: validKm
+  carLicense: validCarLicense,
+  brand: nonEmptyString,
+  model: nonEmptyString,
+  color: nonEmptyString,
+  manufactureYear: validYear,
+  modelYear: validYear,
+  km: validKm,
 });
 
 export const validCarLicenseInput = z.object({
-    car_license: validCarLicense
+  carLicense: validCarLicense,
 });
 
 export const validUpdate = validCar.partial();
