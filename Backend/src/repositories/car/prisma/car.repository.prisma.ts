@@ -12,14 +12,14 @@ export class CarRepositoryPrisma implements CarRepository {
 
   public async save(car: Car): Promise<void> {
     const data = {
-      car_license: car.carLicense,
+      carLicense: car.carLicense,
       brand: car.carBrand,
       model: car.carModel,
       color: car.carColor,
-      manufacture_year: car.carManufactureYear,
-      model_year: car.carModelYear,
+      manufactureYear: car.carManufactureYear,
+      modelYear: car.carModelYear,
       km: car.carKm,
-      user_id: car.carOwner,
+      userId: car.carOwner,
     };
 
     try {
@@ -51,33 +51,33 @@ export class CarRepositoryPrisma implements CarRepository {
 
     await this.prisma.car.update({
       where: {
-        car_license: car.carLicense,
+        carLicense: car.carLicense,
       },
       data,
     });
   }
 
-  public async findByLicense(car_license: string): Promise<Car | null> {
+  public async findByLicense(carLicense: string): Promise<Car | null> {
     const carFromDb = await this.prisma.car.findUnique({
-      where: { car_license },
+      where: { carLicense },
     });
 
     if (!carFromDb) {
       return null;
     }
 
-    const { user_id, brand, model, color, manufacture_year, model_year, km } =
+    const { userId, brand, model, color, manufactureYear, modelYear, km } =
       carFromDb;
 
     const car = Car.with(
-      car_license,
+      carLicense,
       brand,
       model,
       color,
-      manufacture_year,
-      model_year,
+      manufactureYear,
+      modelYear,
       km,
-      user_id
+      userId
     );
 
     return car;
@@ -86,7 +86,7 @@ export class CarRepositoryPrisma implements CarRepository {
   public async findByOwner(owner_id: string): Promise<Car[] | null> {
     const cars = await this.prisma.car.findMany({
       where: {
-        user_id: owner_id,
+        userId: owner_id,
       },
     });
 
@@ -96,23 +96,23 @@ export class CarRepositoryPrisma implements CarRepository {
 
     return cars.map((carData) => {
       return Car.with(
-        carData.car_license,
+        carData.carLicense,
         carData.brand,
         carData.model,
         carData.color,
-        carData.manufacture_year,
-        carData.model_year,
+        carData.manufactureYear,
+        carData.modelYear,
         carData.km,
-        carData.user_id
+        carData.userId
       );
     });
   }
 
-  public async delete(car_license: string): Promise<void> {
+  public async delete(carLicense: string): Promise<void> {
     try {
       await this.prisma.car.delete({
         where: {
-          car_license: car_license,
+          carLicense,
         },
       });
     } catch (error) {

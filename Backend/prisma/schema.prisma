@@ -23,41 +23,41 @@ model User {
 
 // CAR USERS
 model Car {
-  car_license      String @id
+  carLicense      String @id
   brand            String
   model            String 
   color            String
-  manufacture_year String
-  model_year       String
+  manufactureYear  String
+  modelYear       String
   km               Int
 
   // Relação com User
-  user_id          String
-  user_car         User   @relation(fields: [user_id], references: [id])
+  userId          String
+  userCar         User   @relation(fields: [userId], references: [id])
 
   // Relação de volta: Um carro pode ter vários registros de manutenção
-  maintenances     Maintenance_register[]
+  maintenances     MaintenanceRegister[]
 }
 
-model Maintenance_register {
-  maintenance_id Int      @id @default(autoincrement())
+model MaintenanceRegister {
+  maintenanceId Int      @id @default(autoincrement())
   service        String
   date           DateTime 
-  car_km         Int
-  price          Decimal  @db.Decimal(10, 2) 
+  carKm         Int
+  price          Decimal  @db.Decimal(10, 2)
 
   // Relação com Car
-  car_license    String
-  maintenance_car Car      @relation(fields: [car_license], references: [car_license])
+  carLicense    String
+  maintenanceCar Car      @relation(fields: [carLicense], references: [carLicense])
 
   // Relação de volta: Um registro de manutenção tem uma nota fiscal
-  invoice        Maintenance_invoice?
+  invoice        MaintenanceInvoice?
 }
 
-model Maintenance_invoice {
-  // Relação 1-para-1 com Maintenance_register
-  maintenance_id Int    @id 
-  invoice        String
+model MaintenanceInvoice {
+  // Relação 1-para-1 com MaintenanceRegister
+  maintenanceId Int    @id
+  invoice       String
 
-  maintenance_invoice Maintenance_register @relation(fields: [maintenance_id], references: [maintenance_id])
+  maintenanceInvoice MaintenanceRegister @relation(fields: [maintenanceId], references: [maintenanceId])
 }
