@@ -1,5 +1,5 @@
 export type MaintenanceProps = {
-  maintenanceId: number;
+  maintenanceId?: number;
   service: string;
   date: Date;
   carKm: number;
@@ -11,7 +11,6 @@ export class MaintenanceRegister {
   private constructor(readonly props: MaintenanceProps) {}
 
   public static create(
-    maintenanceId: number,
     service: string,
     date: Date,
     carKm: number,
@@ -19,7 +18,6 @@ export class MaintenanceRegister {
     carLicense: string
   ) {
     return new MaintenanceRegister({
-      maintenanceId,
       service,
       date,
       carKm,

@@ -1,4 +1,4 @@
-import { MaintenanceRegister } from "../../entities/maintenance_register";
+import { MaintenanceRegister } from "../../entities/maintenanceRegister";
 
 export interface MaintenanceRegisterRepository {
   save(register: MaintenanceRegister): Promise<void>;
