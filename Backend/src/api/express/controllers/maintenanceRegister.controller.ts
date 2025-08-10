@@ -13,7 +13,7 @@ import { AppError } from "../../../errors/AppError";
 export class MaintenanceRegisterController {
   private constructor() {}
 
-  private static build() {
+  public static build() {
     return new MaintenanceRegisterController();
   }
 
