@@ -1,4 +1,4 @@
-import { MaintenanceProps } from "../../entities/maintenance_register";
+import { MaintenanceProps } from "../../entities/maintenanceRegister";
 
 export type MaintenanceRegisterOutputDto = {
   maintenanceRegister: {
@@ -6,6 +6,16 @@ export type MaintenanceRegisterOutputDto = {
     service: string;
     date: Date;
     carKm: number;
+    price: number;
+    carLicence: string;
+  };
+  message: string;
+};
+
+export type CreateMaintenanceRegisterOutputDto = {
+  maintenanceRegister: {
+    service: string;
+    date: Date;
     price: number;
     carLicence: string;
   };
@@ -26,7 +36,7 @@ type allRegisters = {
 };
 
 export type ManyMaintenanceRegistersOutputDto = {
-  cars: allRegisters[];
+  registers: allRegisters[];
   message: string;
 };
 
@@ -37,13 +47,12 @@ export type DeleteMaintenanceRegisterOutputDto = {
 
 export interface MaintenanceRegisterService {
   createMaintenanceRegisterService(
-    maintenanceId: number,
     service: string,
     date: Date,
     carKm: number,
     price: number,
     carLicence: string
-  ): Promise<MaintenanceRegisterOutputDto>;
+  ): Promise<CreateMaintenanceRegisterOutputDto>;
 
   updateMaintenanceRegisterService(
     maintenanceId: number,
