@@ -1,11 +1,12 @@
 import {
   MaintenanceProps,
   MaintenanceRegister,
-} from "../../../entities/maintenance_register";
+} from "../../../entities/maintenanceRegister";
 import { NotFoundError } from "../../../errors/error.NotFoundError";
 import { AuthenticationError } from "../../../errors/user.error.Authentication";
-import { MaintenanceRegisterRepository } from "../../../repositories/maintenanceRegister/maintenance_register.repository";
+import { MaintenanceRegisterRepository } from "../../../repositories/maintenanceRegister/maintenanceRegister.repository";
 import {
+  CreateMaintenanceRegisterOutputDto,
   DeleteMaintenanceRegisterOutputDto,
   MaintenanceRegisterOutputDto,
   MaintenanceRegisterService,
@@ -23,15 +24,13 @@ export class MaintenanceRegisterServiceImplementation
   }
 
   public async createMaintenanceRegisterService(
-    maintenanceId: number,
     service: string,
     date: Date,
     carKm: number,
     price: number,
     carLicence: string
-  ): Promise<MaintenanceRegisterOutputDto> {
+  ): Promise<CreateMaintenanceRegisterOutputDto> {
     const aRegister = MaintenanceRegister.create(
-      maintenanceId,
       service,
       date,
       carKm,
@@ -41,12 +40,10 @@ export class MaintenanceRegisterServiceImplementation
 
     await this.repository.save(aRegister);
 
-    const output: MaintenanceRegisterOutputDto = {
+    const output: CreateMaintenanceRegisterOutputDto = {
       maintenanceRegister: {
-        maintenanceId: aRegister.maintenanceId,
         service: aRegister.service,
         date: aRegister.date,
-        carKm: aRegister.carKm,
         price: aRegister.price,
         carLicence: aRegister.carLicense,
       },
@@ -93,7 +90,7 @@ export class MaintenanceRegisterServiceImplementation
 
     const output: MaintenanceRegisterOutputDto = {
       maintenanceRegister: {
-        maintenanceId: aRegister.maintenanceId,
+        maintenanceId: aRegister.maintenanceId!, // COM A EXCLAMAÇÃO AFIRMO QUE O CAMPO NÃO SERÁ UNDEFINED
         service: aRegister.service,
         date: aRegister.date,
         carKm: aRegister.carKm,
@@ -114,11 +111,11 @@ export class MaintenanceRegisterServiceImplementation
     );
 
     if (!allRegsitersFromCar) {
-      throw new NotFoundError("Não foram encontrados regsitros de manutenção");
+      throw new NotFoundError("Não foram encontrados registros de manutenção");
     }
 
     const props = allRegsitersFromCar.map((aRegister) => ({
-      maintenanceId: aRegister.maintenanceId,
+      maintenanceId: aRegister.maintenanceId!,
       service: aRegister.service,
       date: aRegister.date,
       carKm: aRegister.carKm,
@@ -127,7 +124,7 @@ export class MaintenanceRegisterServiceImplementation
     }));
 
     const output: ManyMaintenanceRegistersOutputDto = {
-      cars: props,
+      registers: props,
       message: "Registros encontrados com sucesso",
     };
 
